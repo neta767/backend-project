@@ -1,15 +1,22 @@
-class DoublyLinkedListNode<K, V> {
+export class DoublyLinkedListNode<K, V> {
     public key: K;
     public value: V;
     public next: DoublyLinkedListNode<K, V> | null = null;
     public prev: DoublyLinkedListNode<K, V> | null = null;
+
+    constructor(key: K, value: V, next: DoublyLinkedListNode<K, V> = null, prev: DoublyLinkedListNode<K, V> = null) {
+        this.key = key;
+        this.value = value;
+        this.next = next;
+        this.prev = prev;
+    }
 }
 
 
 export class DoublyLinkedList<K, V> {
     public head: DoublyLinkedListNode<K, V>;
     public tail: DoublyLinkedListNode<K, V>;
-    private size: number;
+    public size: number;
 
     constructor() {
         this.head = null;
@@ -17,103 +24,43 @@ export class DoublyLinkedList<K, V> {
         this.size = 0;
     }
 
-    public length(): number {
-        return this.size;
-    }
-
     public isEmpty(): boolean {
         return this.size <= 0;
     }
 
-    public get(key: K): DoublyLinkedListNode<K, V> | undefined {
-        if (this.isEmpty()) {
-            return undefined;
-        }
-        let tmp = this.head;
-        while (tmp != null) {
-            if (tmp.key === key) {
-                return tmp;
-            }
-            tmp = tmp.next;
-        }
-        return undefined;
-    }
-
-    public addFirst(value: any): void {
-        if (this.isEmpty()) {
-            let tmp = new DoublyLinkedListNode<K, V>();
-            tmp.value = value;
-            this.head = tmp;
-            this.tail = tmp;
-            this.size++;
+    public addFirst(key: K, value: V): void {
+        if (!this.head) {
+            this.head = this.tail = new DoublyLinkedListNode<K, V>(key, value);
         } else {
-            let tmp = new DoublyLinkedListNode<K, V>();
-            tmp.next = this.head;
-            tmp.prev = null;
-            tmp.value = value;
-
-            this.head.prev = tmp;
-
-            this.head = tmp;
-            this.size++;
+            const node = new DoublyLinkedListNode(key, value, this.head);
+            this.head.prev = node;
+            this.head = node;
         }
+        this.size++;
     }
 
-    public remove(key: any): boolean {
-        if (this.isEmpty()) {
-            return false;
-        }
-        let tmp = this.head;
-        while (tmp != null) {
-            if (tmp.key === key) {
-                if (tmp.prev != null) {
-                    tmp.prev.next = tmp.next;
-                } else {
-                    this.head = tmp.next;
-                }
-                if (tmp.next != null) {
-                    tmp.next.prev = tmp.prev;
-                } else {
-                    this.tail = tmp.prev;
-                }
-                this.size--;
-                return true;
-            }
-
-            tmp = tmp.next;
-        }
-        return false;
-    }
-
-    public removeFirst() {
-        if (this.isEmpty()) {
-            return;
-        }
-        if (this.size == 1) {
-            this.head = null;
-            this.tail = null;
-            this.size--;
-
+    public remove(existingNode: DoublyLinkedListNode<K, V>): void {
+        if (existingNode.prev !== null) {
+            existingNode.prev.next = existingNode.next;
         } else {
-            this.head = this.head.next;
-            this.head.prev = null;
-            this.size--;
+            this.head = existingNode.next;
         }
+        if (existingNode.next !== null) {
+            existingNode.next.prev = existingNode.prev;
+        } else {
+            this.tail = existingNode.prev;
+        }
+        this.size--;
     }
 
     public removeLast() {
-        if (this.isEmpty()) {
-            return;
-        }
         if (this.size == 1) {
             this.head = null;
             this.tail = null;
-            this.size--;
-
         } else {
             this.tail = this.tail.prev;
             this.tail.next = null;
-            this.size--;
         }
+        this.size--;
     }
 }

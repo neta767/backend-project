@@ -1,44 +1,47 @@
 import {AbstractCacheAlgo} from "../AbstractCacheAlgo";
 import {ICacheAlgo} from "../inteface/ICacheAlgo";
-import {DoublyLinkedList} from "../LinkedList";
+import {DoublyLinkedList, DoublyLinkedListNode} from "../LinkedList";
 
 export class CacheLRU<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlgo<K, V> {
-    #cache = new DoublyLinkedList<K, V>();
-
-    isNotFull = () => this._capacity != this.#cache.length();
+    #linkedList = new DoublyLinkedList<K, V>();
+    #cacheMap = new Map<K, DoublyLinkedListNode<K, V>>();
+    isNotFull = () => this._capacity != this.#cacheMap.size;
 
     getElement(key: K): V | undefined {
-        let current = this.#cache.get(key);
-        if (current) {
-            current.prev.next = current.next;
-            current.next.prev = current.prev;
-            this.#cache.tail.prev.next = current; // insert it after last element. Element before tail
-            current.prev = this.#cache.tail.prev; // update current.prev and next pointer
-            current.next = this.#cache.tail;
-            this.#cache.tail.prev = current; // update last element as tail
-            return current.value;
+        const existingNode = this.#cacheMap.get(key);
+        if (existingNode) {
+            const value = existingNode.value;
+            // Make the node as new Head of LinkedList if not already
+            if (this.#linkedList.head !== existingNode) {
+                this.#linkedList.remove(existingNode);
+                this.#linkedList.addFirst(key, value);
+            }
+            return value;
         } else {
             return undefined;
         }
     }
 
     removeElement(key: K): boolean {
-        return this.#cache.remove(key)
+        const existingNode = this.#cacheMap.get(key);
+        if (existingNode) {
+            this.#linkedList.remove(existingNode);
+        }
+        return this.#cacheMap.delete(key);
     }
 
+    //If during the setElement function some key was removed - the removed
+    // key will be returned, otherwise undefined????
     setElement(key: K, value: V): K | undefined {
-        if (this.#cache.get(key)) {
-            // if key does not exist, update last element value
-            this.#cache.tail.prev.value = value;
-        } else {
-            // check if #cache size is at capacity
-            if (this.isNotFull) {
-                //delete item both from #cache and DLL
-                this.#cache.head.next = this.#cache.head.next.next;
-                this.#cache.head.next.prev = this.#cache.head;
-                this.#cache.removeFirst(); // delete first element of list
-            }
-            this.#cache.addFirst(value); // add current node to #cache
+        const existingNode = this.#cacheMap.get(key);
+        if (existingNode) {
+            this.#linkedList.remove(existingNode);
+        } else if (!this.isNotFull()) {
+            this.#cacheMap.delete(this.#linkedList.tail.key);
+            this.#linkedList.removeLast();
         }
+        this.#linkedList.addFirst(key, value)
+        this.#cacheMap.set(key, this.#linkedList.head);
+        return key;
     }
 }
