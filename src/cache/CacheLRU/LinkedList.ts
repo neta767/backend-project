@@ -21,11 +21,8 @@ export class DoublyLinkedList<K, V> {
     constructor() {
         this.head = null;
         this.tail = null;
+        //not sure if needed-
         this.size = 0;
-    }
-
-    public isEmpty(): boolean {
-        return this.size <= 0;
     }
 
     public addFirst(key: K, value: V): void {
@@ -36,11 +33,11 @@ export class DoublyLinkedList<K, V> {
             this.head.prev = node;
             this.head = node;
         }
-        this.size++;
+        this.size += 1;
     }
 
     public remove(existingNode: DoublyLinkedListNode<K, V>): void {
-        if (existingNode.prev !== null) {
+        if (!existingNode.prev !== null) {
             existingNode.prev.next = existingNode.next;
         } else {
             this.head = existingNode.next;
@@ -50,17 +47,17 @@ export class DoublyLinkedList<K, V> {
         } else {
             this.tail = existingNode.prev;
         }
-        this.size--;
+        this.size -= 1;
     }
 
     public removeLast() {
-        if (this.size == 1) {
+        if (this.size === 1) {
             this.head = null;
             this.tail = null;
         } else {
             this.tail = this.tail.prev;
             this.tail.next = null;
         }
-        this.size--;
+        this.size -= 1;
     }
 }
