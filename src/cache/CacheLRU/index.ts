@@ -34,19 +34,19 @@ export class CacheLRU<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlg
         return this.cacheMap.delete(key);
     }
 
-    //If during the setElement function some key was removed - the removed
-    // key will be returned, otherwise undefined????
     setElement(key: K, value: V): K | undefined {
+        let returnedValue = undefined;
         const existingNode = this.cacheMap.get(key);
         if (existingNode) {
             this.removeElement(key);
         } else if (this.isFull()) {
+            returnedValue = this.linkedList.tail.key;
             this.cacheMap.delete(this.linkedList.tail.key);
             this.linkedList.removeLast();
         }
         this.linkedList.addFirst(key, value);
         this.cacheMap.set(key, this.linkedList.head);
-        return key;
+        return returnedValue;
     }
 }
 
