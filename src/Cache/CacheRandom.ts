@@ -31,18 +31,19 @@ class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAlgo<K,V>
             this.removeElement(key);
             this.setElement(key, value);
             return key
-        };
+        } 
 
         if (!this.isFull()) {
             this.#cacheStorage.set(key, value);
             this.#keysQueueArray.push(key);
+            return
         };
 
         const randomIdxPick = Math.floor(Math.random()*this.#capacity);
         const keypicked = this.#keysQueueArray[randomIdxPick];
         this.removeElement(keypicked);
-
         this.setElement(key, value);
+        return keypicked;
     };
     
 };
