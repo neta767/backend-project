@@ -1,25 +1,23 @@
 import { ICacheAlgo } from "inteface/ICacheAlgo";
-import { AbstractCacheAlgo } from "AbstractCacheAlgo";
+import { AbstractCacheAlgo } from "../AbstractCacheAlgo";
 
-class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAlgo<K,V> {
+export class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAlgo<K,V> {
     #cacheStorage = new Map<K,V>();
-    #keysQueueArray: [] = [];
+    #keysArray: Array<K> = [];
+   
+   
 
-    // 50 just for now...
-    #capacity: number = 50;
-
-    isFull() {return this.#cacheStorage.size === this.#capacity}
+    isFull() {return this.#cacheStorage.size === this._capacity}
 
     getElement(key: K): V | undefined {
-        const result = this.#cacheStorage.get(key);
-        return result;
+        return this.#cacheStorage.get(key);
     };
 
 
     removeElement (key: K): boolean {
-        const idx: number = this.#keysQueueArray.indexOf(key);
+        const idx: number = this.#keysArray.indexOf(key);
         if (idx > -1) {
-            this.#keysQueueArray.splice(idx, 1);
+            this.#keysArray.splice(idx, 1);
             this.#cacheStorage.delete(key);
             return true;
         }
@@ -35,15 +33,17 @@ class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAlgo<K,V>
 
         if (!this.isFull()) {
             this.#cacheStorage.set(key, value);
-            this.#keysQueueArray.push(key);
+            this.#keysArray.push(key);
             return
         };
 
-        const randomIdxPick = Math.floor(Math.random()*this.#capacity);
-        const keypicked = this.#keysQueueArray[randomIdxPick];
+        const randomIdxPick = Math.floor(Math.random()*this._capacity);
+        const keypicked = this.#keysArray[randomIdxPick];
         this.removeElement(keypicked);
         this.setElement(key, value);
         return keypicked;
     };
     
 };
+
+
