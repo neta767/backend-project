@@ -35,18 +35,18 @@ export class CacheLRU<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlg
     }
 
     setElement(key: K, value: V): K | undefined {
-        let returnedValue = undefined;
+        let returnValue = undefined;
         const existingNode = this.cacheMap.get(key);
         if (existingNode) {
             this.removeElement(key);
         } else if (this.isFull()) {
-            returnedValue = this.linkedList.tail.key;
+            returnValue = this.linkedList.tail.key;
             this.cacheMap.delete(this.linkedList.tail.key);
             this.linkedList.removeLast();
         }
         this.linkedList.addFirst(key, value);
         this.cacheMap.set(key, this.linkedList.head);
-        return returnedValue;
+        return returnValue;
     }
 }
 
