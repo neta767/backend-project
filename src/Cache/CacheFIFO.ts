@@ -1,14 +1,15 @@
 import {ICacheAlgo} from "inteface/ICacheAlgo";
 import {AbstractCacheAlgo} from "../AbstractCacheAlgo";
+import {expect} from "chai";
 
 export class CacheFIFO<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlgo<K, V> {
 
-    private cache = new Map<K, V>();
+    public cache = new Map<K, V>();
     // //first is the oldest key
-    private keysQueue: Array<K> = [];
-    private oldestKey: number = 0;
+    public keysQueue: Array<K> = [];
+    public oldestKeyIndex: number = 0;
 
-    isFull = () => this._capacity === this.cache.size;
+    isFull = () => this._capacity === this.keysQueue.length;
 
 
     getElement(key: K): V | undefined {
@@ -30,12 +31,38 @@ export class CacheFIFO<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAl
         if (this.cache.has(key)) {
             this.removeElement(key);
             returnValue = key;
-        } else if (this.isFull() && this.oldestKey === this._capacity) {
-            this.oldestKey = 0;
+            this.keysQueue.push(key)
+            this.oldestKeyIndex -= 1;
+            if (this.oldestKeyIndex === this._capacity) {
+                this.oldestKeyIndex = 0;
+            }
+        } else if (this.isFull()) {
+            returnValue = this.keysQueue[this.oldestKeyIndex];
+            this.cache.set(key, value);
+            this.keysQueue[this.oldestKeyIndex] = key;
+            this.cache.delete(returnValue)
+            this.oldestKeyIndex += 1;
+            if (this.oldestKeyIndex === this._capacity) {
+                this.oldestKeyIndex = 0;
+            }
+        } else {
+            this.keysQueue.push(key)
         }
-        this.keysQueue[this.oldestKey] = key;
-        this.oldestKey += 1;
         this.cache.set(key, value);
         return returnValue;
     }
 }
+
+// todo not working
+const cache = new CacheFIFO(3)
+console.log(cache.setElement('k1', 1))
+// cache.setElement('k2', 2)
+// cache.setElement('k3', 3)
+// console.log('>>>>>', cache.setElement('k4', 4))
+// console.log(cache.cache, cache.keysQueue)
+// console.log(cache.setElement('k6', 6))
+// console.log(cache.cache, cache.keysQueue)
+// console.log(cache.setElement('k6', 7))
+// console.log(cache.cache, cache.keysQueue)
+// console.log(cache.setElement('k7', 7))
+// console.log(cache.cache, cache.keysQueue)
