@@ -52,9 +52,9 @@ export class CacheLRU<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlg
     }
 }
 
-const t = new CacheLRU();
-t.setElement(1, 1);
-t.setElement(1, 1);
+// const t = new CacheLRU();
+// t.setElement(1, 1);
+// t.setElement(1, 1);
 // t.setElement(2, 2);
 // t.setElement(3, 3);
 // t.setElement(4, 4);
