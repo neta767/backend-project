@@ -5,14 +5,19 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsnd --respawn src/cache/CacheLRU",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsnd --respawn src/cache/CacheLRU",
+    "test": "mocha -r ts-node/register src/cache/CacheLRU/*.test.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/chai": "^4.3.4",
     "@types/express": "^4.17.15",
+    "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.17",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
     "ts-node-dev": "^2.0.0"
   },
   "dependencies": {

@@ -37,16 +37,20 @@ export class DoublyLinkedList<K, V> {
     }
 
     public remove(existingNode: DoublyLinkedListNode<K, V>): void {
-        if (!existingNode.prev !== null) {
+
+        if (existingNode.prev !== null) {
             existingNode.prev.next = existingNode.next;
+            console
         } else {
             this.head = existingNode.next;
+    
         }
         if (existingNode.next !== null) {
             existingNode.next.prev = existingNode.prev;
         } else {
             this.tail = existingNode.prev;
         }
+        
         this.size -= 1;
     }
 
