@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --respawn src/cache/CacheLRU",
-    "start": "tsnd --respawn src/cache/CacheLRU",
-    "test": "mocha -r ts-node/register src/cache/CacheLRU/*.test.ts"
+    "dev": "tsnd --respawn src/Cache/CacheLRU",
+    "start": "tsnd --respawn src/Cache/CacheLRU",
+    "test": "mocha -r ts-node/register src/Cache/CacheLRU/*.test.ts"
   },
   "keywords": [],
   "author": "",

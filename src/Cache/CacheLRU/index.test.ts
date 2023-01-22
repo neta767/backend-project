@@ -1,9 +1,8 @@
-import { describe } from "node:test";
-import { expect } from "chai";
-import { CacheLRU } from ".";
-import {DoublyLinkedList, DoublyLinkedListNode} from "./LinkedList";
+import {describe} from "node:test";
+import {expect} from "chai";
+import {CacheLRU} from "./index";
 
-const test = new CacheLRU();
+const test = new CacheLRU(3);
 
 describe('this is for Cache LRU, __capacity = 3', () => {
     it(`getElement, should return undefined for getting non-existing key 1`, () => {
@@ -56,7 +55,7 @@ describe('this is for Cache LRU, __capacity = 3', () => {
         expect(res).to.equals(undefined);
     });
     it(`setElement, should return 1 for setting a new key 4 and _capacity = 3`, () => {
-        const res = test.setElement(4,4);
+        const res = test.setElement(4, 4);
         expect(res).to.equals(1);
     });
     it(`removeElement, should return false for removing non-existing key 1`, () => {
