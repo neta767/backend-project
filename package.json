@@ -6,6 +6,7 @@
   "scripts": {
     "start": "tsnd --respawn src/Cache/CacheRandom.ts",
     "test": "mocha -r ts-node/register src/test/*.test.ts"
+
   },
   "keywords": [],
   "author": "",

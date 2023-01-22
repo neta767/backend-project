@@ -1,20 +1,26 @@
-import { ICacheAlgo } from "inteface/ICacheAlgo";
-import { AbstractCacheAlgo } from "../AbstractCacheAlgo";
 
-export class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAlgo<K,V> {
-    #cacheStorage = new Map<K,V>();
+import {ICacheAlgo} from "inteface/ICacheAlgo";
+import {AbstractCacheAlgo} from "../AbstractCacheAlgo";
+
+class CacheRandom<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlgo<K, V> {
+    #cacheStorage = new Map<K, V>();
     #keysArray: Array<K> = [];
-   
-   
 
-    isFull() {return this.#cacheStorage.size === this._capacity}
+    // 50 just for now...
+    //_capacity = 50;
+
+    isFull() {
+        return this.#cacheStorage.size === this._capacity
+    }
+
 
     getElement(key: K): V | undefined {
         return this.#cacheStorage.get(key);
     };
 
 
-    removeElement (key: K): boolean {
+    removeElement(key: K): boolean {
+
         const idx: number = this.#keysArray.indexOf(key);
         if (idx > -1) {
             this.#keysArray.splice(idx, 1);
@@ -24,26 +30,21 @@ export class CacheRandom<K,V> extends AbstractCacheAlgo<K,V> implements ICacheAl
         return false;
     };
 
-    setElement (key: K, value: V): K | undefined {
+    setElement(key: K, value: V): K | undefined {
+        let returnValue = undefined;
         if (this.#cacheStorage.has(key)) {
             this.removeElement(key);
-            this.setElement(key, value);
-            return key
-        } 
 
-        if (!this.isFull()) {
-            this.#cacheStorage.set(key, value);
-            this.#keysArray.push(key);
-            return
-        };
-
-        const randomIdxPick = Math.floor(Math.random()*this._capacity);
-        const keypicked = this.#keysArray[randomIdxPick];
-        this.removeElement(keypicked);
-        this.setElement(key, value);
-        return keypicked;
-    };
-    
-};
-
+            returnValue = key;
+        } else if (this.isFull()) {
+            const randomIdxPick = Math.floor(Math.random() * this._capacity);
+            const keyPicked = this.#keysArray[randomIdxPick];
+            this.removeElement(keyPicked);
+            returnValue = keyPicked;
+        }
+        this.#cacheStorage.set(key, value);
+        this.#keysArray.push(key);
+        return returnValue;
+    }
+}
 
