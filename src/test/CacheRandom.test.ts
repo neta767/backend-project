@@ -1,14 +1,13 @@
-import { describe } from "node:test";
-import { expect } from "chai";
-import { CacheRandom } from "../Cache/CacheRandom";
+import {describe} from "node:test";
+import {expect} from "chai";
+import {CacheRandom} from "../Cache/CacheRandom";
 
 
 const testClass = new CacheRandom<string, number>(4)
 
 
-
 describe('this is for RandomCache', () => {
-    it('setElement, should return undefined for new key and cache not full', () => {
+    it('setElement, should return undefined for new key and Cache not full', () => {
         const result = testClass.setElement('a', 1)
         expect(result).to.equal(undefined)
     })
@@ -19,7 +18,7 @@ describe('this is for RandomCache', () => {
         expect(result).to.equal('a')
     })
     /// how to test a result of a random key return??
-    // it('setElement, should return random key" after setting to a full cache', () => {
+    // it('setElement, should return random key" after setting to a full Cache', () => {
     //     testClass.setElement('b', 2)
     //     testClass.setElement('c', 3)
     //     testClass.setElement('d', 4)
@@ -44,7 +43,7 @@ describe('this is for RandomCache', () => {
     })
 
     it('removeElement, should return false for none existing key', () => {
-    
+
         const result = testClass.removeElement('doesNotExistKey');
         expect(result).to.equal(false)
     })

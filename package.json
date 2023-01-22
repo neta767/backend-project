@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --respawn src/Cache/CacheRandom.ts",
-    "test": "mocha -r ts-node/register src/test/*.test.ts"
+    "dev": "tsnd --respawn src/Cache/CacheLRU",
+    "start": "tsnd --respawn src/Cache/CacheLRU",
+    "test": "mocha -r ts-node/register src/Cache/CacheLRU/*.test.ts"
   },
   "keywords": [],
   "author": "",
@@ -16,10 +17,10 @@
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.11.17",
     "chai": "^4.3.7",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "ts-node-dev": "^2.0.0"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "ts-node-dev": "^2.0.0"
+    "express": "^4.18.2"
   }
 }
