@@ -50,7 +50,7 @@ export class CacheLRU<K, V> extends AbstractCacheAlgo<K, V> implements ICacheAlg
         this.cacheMap.set(key, this.linkedList.head);
         return returnValue;
     }
-}
+};
 
 // const t = new CacheLRU();
 // t.setElement(1, 1);
